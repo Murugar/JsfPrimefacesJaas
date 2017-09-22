@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.iqmsoft.jaas.jsf</groupId>
+    <artifactId>JsfPrimefacesJaas</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <name>JSF 2.2 - PrimeFaces with JAAS Authentication </name>
+   
+
+    <properties>
+        <version.jsf.myfaces>2.2.6</version.jsf.myfaces>
+        <version.primefaces>5.1</version.primefaces>
+
+        <version.jdk>1.8</version.jdk>
+        <!-- Source code and Resources encodings (the default value for all plugins) -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+       <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- ***********************************************************************************************************
+
+            APPLICATION DEPENDENCIES
+
+            The dependencies below are exclusive to this application and should be packaged with it.
+
+        -->
+        <!--
+            WEB DEPENDENCIES (JSF(MyFaces)+Primefaces+JSTL)
+        -->
+        <!-- JSF API and IMPL - We are using MyFaces, as Mojarra (com.sun.faces:jsf-api/-impl:2.2.8-02) does not work well with "mvn tomcat7:run" -->
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>${version.jsf.myfaces}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>${version.jsf.myfaces}</version>
+        </dependency>
+        <!-- PrimeFaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>${version.primefaces}</version>
+        </dependency>
+        <!-- JSTL: Used by the <c:stuff> tags -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <!--
+            DATABASE DEPENDENCIES (JPA+HIBERNATE)
+        -->
+        <!-- JPA 2.1 API (It is included in the hibernate-entitymanager below, but we keep it here for completeness)  -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <!-- Hibernate O/RM implementation of the JPA specification -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.174</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+        <!-- ***********************************************************************************************************
+            TEST DEPENDENCIES
+
+            Libraries used only during testing.
+        -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.8</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hamcrest-core</artifactId>
+                    <groupId>org.hamcrest</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>${version.jdk}</source>
+                    <target>${version.jdk}</target>
+                </configuration>
+            </plugin>
+
+            <!-- BEGIN: TOMCAT7:RUN -->
+            <!-- This plugin is here so the (goal) "mvn tomcat7:run" works without any prefix; also because
+            we want to set some configuration files, usually present in the production server while deploying.
+            More info about this plugin: http://tomcat.apache.org/maven-plugin-2.2/ -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <contextFile>${basedir}/src/test/resources/tomcat7-run/context.xml</contextFile>
+                    <additionalClasspathDirs>
+                        <additionalClasspathDir>${basedir}/src/test/resources/sql</additionalClasspathDir>
+                    </additionalClasspathDirs>
+                    <tomcatUsers>${basedir}/src/test/resources/tomcat7-run/tomcat-users.xml</tomcatUsers>
+                </configuration>
+            </plugin>
+            <!-- END: TOMCAT7:RUN -->
+
+        </plugins>
+    </build>
+
+  
+</project>

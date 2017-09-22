@@ -1,0 +1,55 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:cms="http://primefaces.org/cms"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <div class="Animated05" id="layout-menu-cover">
+
+            <h:form>
+            <ul class="layout-menu">
+                <c:if test="#{loginManager.userLoggedIn}">
+                <li>
+                    <a class="menulink ripplelink">
+                        <i class="icon-round58 Fs40"></i>
+                        <span class="Fs18">#{loginManager.user}<i class="icon-downwards Fright Fs20"></i><br /><span class="Fs12 FontRobotoLight">Sr. System Administrator</span></span>
+                    </a>
+                    <ul>
+                        <li><a href="#" class="menulink ripplelink"><i class="icon-user158 Fs16"></i> User Profile</a></li>
+                        <li><a href="#" class="menulink ripplelink"><i class="icon-two385 Fs16"></i> Change User</a></li>
+                        <li><a href="#" class="menulink ripplelink"><i class="icon-settings49 Fs16"></i> System Settings</a></li>
+                        <li>
+                            <p:commandLink id="nonAjax"  styleClass="menulink ripplelink" actionListener="#{loginManager.logout}" ajax="false">
+                                <i class="icon-thermostat1 Fs16"></i> Log out
+                            </p:commandLink>
+                        </li>
+                    </ul>
+                </li>
+                </c:if>
+            </ul>
+
+            </h:form>
+        <div class="Separator"></div>
+
+        <cms:menu>
+            <p:menuitem value="Home page" icon="icon-home" outcome="/pages/index"/>
+            <p:separator/>
+            <p:menuitem value="Sample page" icon="icon-website12" outcome="/pages/sample_page"/>
+            <p:menuitem value="User-only page" icon="icon-person325" outcome="/pages/user/index"/>
+            <p:menuitem value="Admin-only page" icon="icon-unlocked43" outcome="/pages/admin/index"/>
+            <p:separator/>
+            <p:menuitem value="Login page" icon="icon-in-alt" outcome="/pages/authentication/login" rendered="#{!loginManager.userLoggedIn}"/>
+
+            <p:submenu id="rm_docs" label="Documentation" icon="icon-receipt9">
+                <p:menuitem value="Janci Homepage" url="http://webus.sk" icon="fa fa-book"/>
+                <p:menuitem value="PrimeFaces MenuBar" url="http://www.primefaces.org/showcase/ui/menu/menubar.xhtml" icon="fa fa-book"/>
+                <p:menuitem value="PDF Documentation" url="http://www.primefaces.org/docs/guide/primefaces_user_guide_5_1.pdf" icon="fa fa-book"/>
+            </p:submenu>
+            <p:separator/>
+        </cms:menu>
+
+    </div>
+
+</ui:composition>
